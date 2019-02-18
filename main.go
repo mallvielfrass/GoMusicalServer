@@ -1,1 +1,5 @@
-fv vfv
+package main
+
+func main() {
+
+}
