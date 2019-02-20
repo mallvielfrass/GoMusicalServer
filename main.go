@@ -28,6 +28,11 @@ type MItem struct {
 	Date     int    `json:"date"`
 	URL      string `json:"url"`
 }
+type Musica struct {
+	Title  string `json:"title"`
+	Artist string `json:"artist"`
+	Url    string `json:"url"`
+}
 
 func api(w http.ResponseWriter, r *http.Request) {
 
@@ -50,6 +55,8 @@ func api(w http.ResponseWriter, r *http.Request) {
 
 	resVK := api.AudioSearch(mname, 10, 0)
 	//fmt.Println(x)
+	//
+	//fmt.Println(resVK)
 	bx := []byte(resVK)
 	var result MResult
 
@@ -58,11 +65,30 @@ func api(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 	R := result.Response.Items
-	fmt.Println(len(R))
-	fullMusic := "title:" + R[0].Title + "<br>" + "Artist:" + R[0].Artist + "<br>" + "url: " + R[0].URL
-	fmt.Println(fullMusic)
+
+	lenR := len(R)
+
+	//fullMusic := "title:" + R[0].Title + "<br>" + "Artist:" + R[0].Artist + "<br>" + "url: " + R[0].URL
+	var Musa = []Musica{}
+	i := 0
+	for i < lenR {
+		var msg = new(Musica)
+		msg.Title = R[i].Title
+		msg.Artist = R[i].Artist
+		msg.Url = R[i].URL
+		Musa = append(Musa, *msg)
+		i = i + 1
+	}
+	//fmt.Println(fullMusic)
+	//fmt.Println(Musa)
+	jsMusa, err := json.Marshal(Musa)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	fmt.Println(string(jsMusa))
 	//filename := "audio/" + R[0].Title + ".mp3"
-	fmt.Fprintf(w, fullMusic)
+	fmt.Fprintf(w, string(jsMusa))
 
 }
 func search(w http.ResponseWriter, r *http.Request) {
