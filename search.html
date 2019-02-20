@@ -1,0 +1,22 @@
+<head>
+    <script>
+        async function send(name) {
+    let response = await fetch('/api?q='+name);
+    document.querySelector('#lol').innerHTML = await response.text();
+}
+     function   alarms(form){
+        var name = form.name.value;   
+        send(name);
+     }     
+    </script>
+</head>
+<body>
+<h3>Ciao Mondo!</h3>
+<form action="" method="post" name="test" onsubmit="alarms(this);return false">
+
+<label for="name">Il nome</label>
+<input type="text" name="name" placeholder="il nome" id="name" />
+<input type="submit" name="submit" value="Inviare" />
+</form>
+<p id="lol">Prima testo!</p>
+</body>
