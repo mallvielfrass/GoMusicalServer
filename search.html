@@ -2,7 +2,18 @@
     <script>
         async function send(name) {
     let response = await fetch('/api?q='+name);
-    document.querySelector('#lol').innerHTML = await response.text();
+    var Jresponce=JSON.parse(await response.text());
+    var length = Object.keys(Jresponce).length; 
+    console.log("len=",length);
+    var i = 0;
+    var send="";
+    
+    while (i < length) {
+     send=send+`<br> <a href="URL">`+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`</a>`;
+     i++;
+}
+    document.querySelector('#lol').innerHTML =send;
+    
 }
      function   alarms(form){
         var name = form.name.value;   
