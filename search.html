@@ -9,7 +9,7 @@
     var send="";
     
     while (i < length) {
-     send=send+`<br> <a href="URL">`+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`</a>`;
+     send=send+`<br> <a href="/api?link=`+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`">`+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`</a>`;
      i++;
 }
     document.querySelector('#lol').innerHTML =send;
