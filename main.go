@@ -64,6 +64,21 @@ type Musica struct {
 	Url     string `json:"url"`
 }
 
+func localscan(id string) string {
+	files, err := ioutil.ReadDir("opus")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		name := file.Name()
+		idz := strings.Split(name, "_split_")
+		if idz[1] == name {
+			fmt.Println(name)
+		}
+	}
+	return "ok"
+}
 func api(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(r)
@@ -76,6 +91,7 @@ func api(w http.ResponseWriter, r *http.Request) {
 	if ok {
 		fmt.Println("value: ", value)
 		mname := string(key["q"][0]) //get music name
+
 		//res := "audio nome: " + mname
 		//________________________________
 		ready, err := ioutil.ReadFile("key.txt") // Считываем ключ из файла
@@ -135,6 +151,8 @@ func api(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(value[0])
 		arr := strings.Split(value[0], "cut=")
 		id := "_split_" + arr[1] + "_split_"
+		addr := localscan(id)
+		fmt.Println("localsscan:", addr)
 		name := id + arr[2]
 		link := arr[3]
 
