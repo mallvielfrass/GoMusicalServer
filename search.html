@@ -9,7 +9,8 @@
     var send="";
     
     while (i < length) {
-     send=send+`<br> <a href="/api?link=`+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`">`+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`</a>`;
+        console.log(Jresponce[i])
+     send=send+`<br> <a href="/api?link=`+"cut="+Jresponce[i]["owner_id"]+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`">`+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+Jresponce[i]["owner_id"]+`</a>`;
      i++;
 }
     document.querySelector('#lol').innerHTML =send;

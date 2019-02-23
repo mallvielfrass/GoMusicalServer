@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	pretiumvkgo "github.com/mallvielfrass/pretiumVKgo"
@@ -57,9 +58,10 @@ type MItem struct {
 	URL      string `json:"url"`
 }
 type Musica struct {
-	Title  string `json:"title"`
-	Artist string `json:"artist"`
-	Url    string `json:"url"`
+	OwnedID string `json:"owner_id"`
+	Title   string `json:"title"`
+	Artist  string `json:"artist"`
+	Url     string `json:"url"`
 }
 
 func api(w http.ResponseWriter, r *http.Request) {
@@ -103,15 +105,19 @@ func api(w http.ResponseWriter, r *http.Request) {
 		var Musa = []Musica{}
 		i := 0
 		for i < lenR {
+
 			var msg = new(Musica)
+			//fmt.Println(R[i].OwnedID)
+			msg.OwnedID = strconv.Itoa(R[i].OwnedID)
 			msg.Title = R[i].Title
 			msg.Artist = R[i].Artist
 			msg.Url = R[i].URL
+
 			Musa = append(Musa, *msg)
 			i = i + 1
 		}
 		//fmt.Println(fullMusic)
-		//fmt.Println(Musa)
+		fmt.Println(Musa)
 		jsMusa, err := json.Marshal(Musa)
 		if err != nil {
 			fmt.Printf("Error: %s", err)
@@ -128,13 +134,18 @@ func api(w http.ResponseWriter, r *http.Request) {
 
 		//fmt.Println(value[0])
 		arr := strings.Split(value[0], "cut=")
-		name := arr[1]
-		link := arr[2]
+		id := "_split_" + arr[1] + "_split_"
+		name := id + arr[2]
+		link := arr[3]
+
+		fmt.Println("func Download")
 		fmt.Println(name, "\n", link)
-		nameDown := "music/" + name + ".mp3"
+		//nameDown := "music/" + name + ".mp3"
 		nameOpus := "opus/" + name + ".opus"
-		downloadFile(nameDown, link)
-		command := "ffmpeg -i " + "'" + nameDown + "'" + " -c:a libopus -b:a 48k -vbr on -compression_level 10 -frame_duration 60 -application voip " + "'" + nameOpus + "'"
+		//downloadFile(nameDown, link)
+		fmt.Println(arr[1])
+		fmt.Println("func Download close")
+		command := "ffmpeg -i " + "'" + link + "'" + " -c:a libopus -b:a 48k -vbr on -compression_level 10 -frame_duration 60 -application voip " + "'" + nameOpus + "'"
 		fmt.Println(command)
 		out, err := exec.Command("bash", "-c", command).Output()
 		if err != nil {
