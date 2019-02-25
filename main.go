@@ -103,9 +103,9 @@ func api(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("enter music name")
 
 		resVK := api.AudioSearch(mname, 10, 0)
-		//fmt.Println(x)
+
 		//
-		//fmt.Println(resVK)
+		fmt.Println(resVK)
 		bx := []byte(resVK)
 		var result MResult
 
