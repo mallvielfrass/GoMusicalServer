@@ -188,6 +188,6 @@ func main() {
 	fs := http.FileServer(http.Dir("opus"))
 	http.Handle("/opus/", http.StripPrefix("/opus/", fs))
 	fmt.Println("Server is listening...", "\n", "localhost:8181")
-	http.ListenAndServe("localhost:8181", nil)
+	http.ListenAndServe(":80", nil)
 
 }
