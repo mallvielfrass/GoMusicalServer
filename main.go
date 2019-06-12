@@ -80,7 +80,8 @@ func localscan(id string) string {
 	return "ok"
 }
 func api(w http.ResponseWriter, r *http.Request) {
-
+	w.Header().Set("Content-Type", "enctype")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	fmt.Println(r)
 	fmt.Println(r.URL)
 	fmt.Println(r.URL.Host)
@@ -99,10 +100,10 @@ func api(w http.ResponseWriter, r *http.Request) {
 			log.Fatalln("Не удалось считать ключ из файла:", err)
 		}
 		keys := (strings.Split(string(ready), "\n"))[0]
-		api := pretiumvkgo.NewAPI(keys)
+		api := pretiumvkgo.OldAPI(keys)
 		fmt.Println("enter music name")
-
-		resVK := api.AudioSearch(mname, 10, 0)
+		fmt.Println("enter music name")
+		resVK := api.AudioSearch(mname, 100, 0)
 
 		//
 		fmt.Println(resVK)
@@ -185,9 +186,10 @@ func search(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/api", api)
 	http.HandleFunc("/search", search)
+	http.HandleFunc("/", search)
 	fs := http.FileServer(http.Dir("opus"))
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/opus/", http.StripPrefix("/opus/", fs))
-	fmt.Println("Server is listening...", "\n", "localhost:8181")
-	http.ListenAndServe(":80", nil)
-
+	fmt.Println("Server is listening...", "\n", "localhost:5050")
+	log.Fatal(http.ListenAndServe(":5050", nil))
 }

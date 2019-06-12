@@ -1,4 +1,5 @@
 <head>
+
     <script>
         async function send(name) {
     let response = await fetch('/api?q='+name);
@@ -10,25 +11,36 @@
     
     while (i < length) {
         console.log(Jresponce[i])
-     send=send+`<br> <a href="/api?link=`+"cut="+Jresponce[i]["owner_id"]+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`">`+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+Jresponce[i]["owner_id"]+`</a>`;
+     send=send+`<p class="box"> `+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`<a href="/api?link=`+"cut="+Jresponce[i]["owner_id"]+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`"><span class="music_text">♬</span></a> </p>`;
      i++;
 }
     document.querySelector('#lol').innerHTML =send;
     
 }
      function   alarms(form){
-        var name = form.name.value;   
+        var name = form.searchString.value;   
         send(name);
      }     
     </script>
+  <link rel="stylesheet" href="/css/mui.css" />
 </head>
 <body>
 <h3>Ciao Mondo!</h3>
+
 <form action="" method="post" name="test" onsubmit="alarms(this);return false">
 
-<label for="name">Il nome</label>
-<input type="text" name="name" placeholder="il nome" id="name" />
-<input type="submit" name="submit" value="Inviare" />
+
+
+<input class="input" type="text" placeholder="Запрос" name="searchString" required="" size="30">
+
+<button type="submit" class="uk-button">Получить</button>
 </form>
 <p id="lol">Prima testo!</p>
+
+
+
+<p class="box"> test fsvnfvkdjfvnkdfjvnkjdfvnkndfvkjdfvnkdjnkjfvnkdjfvnfnkfnvfkn
+    fmfvm
+    <span class="music_text">♬</span>
+</p>
 </body>
