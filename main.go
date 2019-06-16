@@ -3,42 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"os/exec"
 	"strconv"
 	"strings"
 
 	pretiumvkgo "github.com/mallvielfrass/pretiumVKgo"
 )
-
-func downloadFile(filepath string, url string) (err error) {
-
-	// Create the file
-	out, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-
-	// Get the data
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	// Writer the body to file
-	_, err = io.Copy(out, resp.Body)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
 
 type MResult struct {
 	Response MResponse `json:"response"`
@@ -64,21 +37,6 @@ type Musica struct {
 	Url     string `json:"url"`
 }
 
-func localscan(id string) string {
-	files, err := ioutil.ReadDir("opus")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, file := range files {
-		name := file.Name()
-		idz := strings.Split(name, "_split_")
-		if idz[1] == name {
-			fmt.Println(name)
-		}
-	}
-	return "ok"
-}
 func api(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "enctype")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -101,12 +59,12 @@ func api(w http.ResponseWriter, r *http.Request) {
 		}
 		keys := (strings.Split(string(ready), "\n"))[0]
 		api := pretiumvkgo.OldAPI(keys)
-		fmt.Println("enter music name")
+
 		fmt.Println("enter music name")
 		resVK := api.AudioSearch(mname, 100, 0)
 
 		//
-		fmt.Println(resVK)
+		//fmt.Println(resVK)
 		bx := []byte(resVK)
 		var result MResult
 
@@ -122,26 +80,22 @@ func api(w http.ResponseWriter, r *http.Request) {
 		var Musa = []Musica{}
 		i := 0
 		for i < lenR {
-
 			var msg = new(Musica)
-			//fmt.Println(R[i].OwnedID)
 			msg.OwnedID = strconv.Itoa(R[i].OwnedID)
 			msg.Title = R[i].Title
 			msg.Artist = R[i].Artist
 			msg.Url = R[i].URL
-
 			Musa = append(Musa, *msg)
 			i = i + 1
 		}
 		//fmt.Println(fullMusic)
-		fmt.Println(Musa)
+		fmt.Println("Musa")
 		jsMusa, err := json.Marshal(Musa)
 		if err != nil {
 			fmt.Printf("Error: %s", err)
 			return
 		}
-		//fmt.Println(string(jsMusa)) //musica
-		//filename := "audio/" + R[0].Title + ".mp3"
+
 		fmt.Fprintf(w, string(jsMusa))
 	} else {
 		fmt.Println("key q not found")
@@ -149,47 +103,37 @@ func api(w http.ResponseWriter, r *http.Request) {
 	value, ok = key["link"]
 	if ok {
 
-		//fmt.Println(value[0])
 		arr := strings.Split(value[0], "cut=")
-		id := "_split_" + arr[1] + "_split_"
+		id := arr[1]
+		fmt.Println(check())
 		addr := localscan(id)
 		fmt.Println("localsscan:", addr)
-		name := id + arr[2]
+		name := "_split_" + id + "_split_" + arr[2]
 		link := arr[3]
 
-		fmt.Println("func Download")
+		//fmt.Println("func Download")
 		fmt.Println(name, "\n", link)
 		//nameDown := "music/" + name + ".mp3"
 		nameOpus := "opus/" + name + ".opus"
-		//downloadFile(nameDown, link)
-		fmt.Println(arr[1])
-		fmt.Println("func Download close")
-		command := "ffmpeg -i " + "'" + link + "'" + " -c:a libopus -b:a 48k -vbr on -compression_level 10 -frame_duration 60 -application voip " + "'" + nameOpus + "'"
-		fmt.Println(command)
-		out, err := exec.Command("bash", "-c", command).Output()
-		if err != nil {
-			log.Fatal(err)
-			panic("some error found")
+		if addr == "true" {
+			fmt.Println("song is true")
 		}
-		fmt.Println(string(out))
+		if addr == "false" {
+			//downloadFile(nameOpus, link)
+			fmt.Println(arr[1])
+			fmt.Println("func Download start")
+			command := "ffmpeg -i " + "'" + link + "'" + " -c:a libopus -b:a 48k -vbr on -compression_level 10 -frame_duration 60 -application voip " + "'" + nameOpus + "'"
+			fmt.Println(command)
+			out, err := exec.Command("bash", "-c", command).Output()
+			if err != nil {
+				log.Fatal(err)
+				panic("some error found")
+			}
+			fmt.Println(string(out))
+		}
 		http.Redirect(w, r, "/"+nameOpus, 301)
 
 	} else {
-		fmt.Println("key not found")
+		fmt.Println("key link not found")
 	}
-}
-func search(w http.ResponseWriter, r *http.Request) {
-
-	http.ServeFile(w, r, "search.html")
-
-}
-func main() {
-	http.HandleFunc("/api", api)
-	http.HandleFunc("/search", search)
-	http.HandleFunc("/", search)
-	fs := http.FileServer(http.Dir("opus"))
-	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-	http.Handle("/opus/", http.StripPrefix("/opus/", fs))
-	fmt.Println("Server is listening...", "\n", "localhost:5050")
-	log.Fatal(http.ListenAndServe(":5050", nil))
 }
