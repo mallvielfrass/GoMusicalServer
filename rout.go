@@ -6,6 +6,14 @@ import (
 	"net/http"
 )
 
+//отдельная функция для проверки ошибок. юзать:
+//	exampl, err := ("lol")
+//		check(err)
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 func search(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "pages/search.html")
 }

@@ -3,12 +3,11 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 )
 
-func check() string {
+func checkFile() string {
 	if _, err := os.Stat("opus"); os.IsNotExist(err) {
 		return "false. create dir opus please,and restart programm"
 	}
@@ -17,10 +16,8 @@ func check() string {
 func localscan(id string) string {
 
 	files, err := ioutil.ReadDir("opus")
-	if err != nil {
-		log.Fatal(err)
+	check(err)
 
-	}
 	ret := "false"
 	for _, file := range files {
 		name := file.Name()

@@ -69,9 +69,7 @@ func api(w http.ResponseWriter, r *http.Request) {
 		var result MResult
 
 		err = json.Unmarshal(bx, &result)
-		if err != nil {
-			log.Fatalln(err)
-		}
+		check(err)
 		R := result.Response.Items
 
 		lenR := len(R)
@@ -91,10 +89,7 @@ func api(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(fullMusic)
 		fmt.Println("Musa")
 		jsMusa, err := json.Marshal(Musa)
-		if err != nil {
-			fmt.Printf("Error: %s", err)
-			return
-		}
+		check(err)
 
 		fmt.Fprintf(w, string(jsMusa))
 	} else {
@@ -105,7 +100,7 @@ func api(w http.ResponseWriter, r *http.Request) {
 
 		arr := strings.Split(value[0], "cut=")
 		id := arr[1]
-		fmt.Println(check())
+		fmt.Println(checkFile())
 		addr := localscan(id)
 		fmt.Println("localsscan:", addr)
 		name := "_split_" + id + "_split_" + arr[2]
