@@ -1,46 +1,32 @@
-<head>
-
-    <script>
-        async function send(name) {
-    let response = await fetch('/api?q='+name);
-    var Jresponce=JSON.parse(await response.text());
-    var length = Object.keys(Jresponce).length; 
-    console.log("len=",length);
-    var i = 0;
-    var send="";
-    
-    while (i < length) {
-        console.log(Jresponce[i])
-     send=send+`<p class="box"> `+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`<a href="/api?link=`+"cut="+Jresponce[i]["owner_id"]+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`"><span class="music_text">♬</span></a> </p>`;
-     i++;
-}
-    document.querySelector('#lol').innerHTML =send;
-    
-}
-     function   alarms(form){
-        var name = form.searchString.value;   
-        send(name);
-     }     
-    </script>
-  <link rel="stylesheet" href="/css/mui.css" />
-</head>
-<body>
-<h3>Ciao Mondo!</h3>
-
-<form action="" method="post" name="test" onsubmit="alarms(this);return false">
-
-
-
-<input class="input" type="text" placeholder="Запрос" name="searchString" required="" size="30">
-
-<button type="submit" class="uk-button">Получить</button>
-</form>
-<p id="lol">Prima testo!</p>
-
-
-
-<p class="box"> test fsvnfvkdjfvnkdfjvnkjdfvnkndfvkjdfvnkdjnkjfvnkdjfvnfnkfnvfkn
-    fmfvm
-    <span class="music_text">♬</span>
-</p>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+	<script src="/js/rsngm_script.js"></script>
+	<script src="js/script.js"></script>
+	<link href="css/mui.css" rel="stylesheet"/>
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"> 
+	<title>Сервис поиска музыки.</title>
+  </head>
+  <body>
+	<header><nav>
+		<ul>
+		  <li>
+			<a class="header_navigator" href="">API</a>
+			<a class="header_navigator" href="">Contacts</a>
+			<a class="header_navigator" href="">About</a>
+		  </li>
+		</ul>
+	  </nav>
+	</header>
+	<h3>Введи сюда свой запрос, и, </h3>
+	<form action="" method="post" name="test" onsubmit="alarms(this);return false">
+	  <input class="input" type="text" placeholder="Запрос" name="searchString" required="" size="30">
+	  <button type="submit">Получить</button>
+	</form>
+	<p id="lol"></p>
+	   <p class="box">
+		 <span class="music_text"></span>
+	   </p>
 </body>
+</html>

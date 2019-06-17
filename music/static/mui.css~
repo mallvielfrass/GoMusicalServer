@@ -1,0 +1,10 @@
+body {
+	background: #FFFFFF;
+}
+li a {
+	color: white;
+}
+.box p {
+	display: inline-block;
+	background: black;
+}
