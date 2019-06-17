@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os/exec"
 	"strconv"
 	"strings"
 
@@ -114,17 +113,8 @@ func api(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("song is true")
 		}
 		if addr == "false" {
-			//downloadFile(nameOpus, link)
-			fmt.Println(arr[1])
 			fmt.Println("func Download start")
-			command := "ffmpeg -i " + "'" + link + "'" + " -c:a libopus -b:a 48k -vbr on -compression_level 10 -frame_duration 60 -application voip " + "'" + nameOpus + "'"
-			fmt.Println(command)
-			out, err := exec.Command("bash", "-c", command).Output()
-			if err != nil {
-				log.Fatal(err)
-				panic("some error found")
-			}
-			fmt.Println(string(out))
+			convert(link, nameOpus)
 		}
 		http.Redirect(w, r, "/"+nameOpus, 301)
 
