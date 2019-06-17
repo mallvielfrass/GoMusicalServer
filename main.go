@@ -30,10 +30,11 @@ type MItem struct {
 	URL      string `json:"url"`
 }
 type Musica struct {
-	OwnedID string `json:"owner_id"`
-	Title   string `json:"title"`
-	Artist  string `json:"artist"`
-	Url     string `json:"url"`
+	ID string `json:"id"`
+	//OwnedID string `json:"owner_id"`
+	Title  string `json:"title"`
+	Artist string `json:"artist"`
+	URL    string `json:"url"`
 }
 
 func api(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +71,7 @@ func api(w http.ResponseWriter, r *http.Request) {
 		err = json.Unmarshal(bx, &result)
 		check(err)
 		R := result.Response.Items
-
+		fmt.Println("music", R[0])
 		lenR := len(R)
 
 		//fullMusic := "title:" + R[0].Title + "<br>" + "Artist:" + R[0].Artist + "<br>" + "url: " + R[0].URL
@@ -78,10 +79,11 @@ func api(w http.ResponseWriter, r *http.Request) {
 		i := 0
 		for i < lenR {
 			var msg = new(Musica)
-			msg.OwnedID = strconv.Itoa(R[i].OwnedID)
+			msg.ID = strconv.Itoa(R[i].ID)
+			//msg.OwnedID = strconv.Itoa(R[i].OwnedID)
 			msg.Title = R[i].Title
 			msg.Artist = R[i].Artist
-			msg.Url = R[i].URL
+			msg.URL = R[i].URL
 			Musa = append(Musa, *msg)
 			i = i + 1
 		}
@@ -99,7 +101,7 @@ func api(w http.ResponseWriter, r *http.Request) {
 
 		arr := strings.Split(value[0], "cut=")
 		id := arr[1]
-		fmt.Println(checkFile())
+
 		addr := localscan(id)
 		fmt.Println("localsscan:", addr)
 		name := "_split_" + id + "_split_" + arr[2]
@@ -109,9 +111,9 @@ func api(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(name, "\n", link)
 		//nameDown := "music/" + name + ".mp3"
 		nameOpus := "opus/" + name + ".opus"
-		if addr == "true" {
-			fmt.Println("song is true")
-		}
+		//if addr == "true" {
+		//	fmt.Println("song is true")
+		//	}
 		if addr == "false" {
 			fmt.Println("func Download start")
 			convert(link, nameOpus)

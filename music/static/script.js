@@ -7,7 +7,7 @@ async function send(name) {
 	var send="";
 	var play_button=`<button id="play">Прослушать </button>`;
 	while (i < length) {
-		var post = `<p class="box"> `+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`<a href="/api?link=`+"cut="+Jresponce[i]["owner_id"]+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`"><span class="music_text">`+play_button+`</span></a> </p>"`;
+		var post = `<p class="box"> `+Jresponce[i]["artist"] +" - " +Jresponce[i]["title"]+`<a href="/api?link=`+"cut="+Jresponce[i]["id"]+"cut="+Jresponce[i]["artist"]+"-"+Jresponce[i]["title"]+"cut="+Jresponce[i]["url"]+`"><span class="music_text">`+play_button+`</span></a> </p>"`;
 		console.log(Jresponce[i]);
 		send=send+post;
 		i++;

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	mod "github.com/mallvielfrass/GoMusicalServer/mod"
 )
 
 //отдельная функция для проверки ошибок. юзать:
@@ -45,6 +47,7 @@ func main() {
 
 	//start
 	ip := ":5050"
+	fmt.Println("check folder: ", mod.CheckFile("opus"))
 	fmt.Println("Server is listening...", "\n", "localhost%s", ip)
 	log.Fatal(http.ListenAndServe(ip, nil))
 }
