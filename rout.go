@@ -7,26 +7,36 @@ import (
 )
 
 func search(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "search.html")
+	http.ServeFile(w, r, "pages/search.html")
 }
-func api_html(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "api.html")
+func apiHTML(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "pages/api.html")
 }
-func about_html(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "about.html")
+func aboutHTML(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "pages/about.html")
 }
 
 func main() {
-	http.HandleFunc("/api_help", api_html)
-	http.HandleFunc("/about", about_html)
-	http.HandleFunc("/api", api)
-	http.HandleFunc("/search", search)
+
+	//pages
 	http.HandleFunc("/", search)
+	http.HandleFunc("/api_help", apiHTML)
+	http.HandleFunc("/about", aboutHTML)
+	http.HandleFunc("/search", search)
+
+	//api
+	http.HandleFunc("/api", api)
+
+	//	static files
 	fs := http.FileServer(http.Dir("opus"))
 	static := http.FileServer(http.Dir("music/static"))
+
 	http.Handle("/opus/", http.StripPrefix("/opus/", fs))
 	http.Handle("/js/", http.StripPrefix("/js/", static))
 	http.Handle("/css/", http.StripPrefix("/css/", static))
-	fmt.Println("Server is listening...", "\n", "localhost:5050")
-	log.Fatal(http.ListenAndServe(":5050", nil))
+
+	//start
+	ip := ":5050"
+	fmt.Println("Server is listening...", "\n", "localhost%s", ip)
+	log.Fatal(http.ListenAndServe(ip, nil))
 }
