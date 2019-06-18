@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	mod "github.com/mallvielfrass/GoMusicalServer/mod"
+	jql "github.com/mallvielfrass/GoMusicalServer/mod/jql"
 )
 
 //отдельная функция для проверки ошибок. юзать:
@@ -27,7 +28,8 @@ func aboutHTML(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
+	//test
+	jql.Mainez()
 	//pages
 	http.HandleFunc("/", search)
 	http.HandleFunc("/api_help", apiHTML)
