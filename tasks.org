@@ -1,0 +1,5 @@
+
+* TODO make support of parse [zaycev.net]
+
+* TODO make support of parse [music.yandex.ru]
+
