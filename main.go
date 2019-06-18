@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	mod "github.com/mallvielfrass/GoMusicalServer/mod"
 	pretiumvkgo "github.com/mallvielfrass/pretiumVKgo"
 )
 
@@ -117,8 +118,13 @@ func api(w http.ResponseWriter, r *http.Request) {
 		if addr == "false" {
 			fmt.Println("func Download start")
 			convert(link, nameOpus)
+			hash := mod.GetHash(nameOpus)
+			name := mod.Rename(nameOpus, hash)
+			http.Redirect(w, r, "/opus/"+name, 301)
 		}
-		http.Redirect(w, r, "/"+nameOpus, 301)
+		if addr == "true" {
+			http.Redirect(w, r, "/"+nameOpus, 301)
+		}
 
 	} else {
 		fmt.Println("key link not found")
