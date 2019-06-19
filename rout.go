@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	mod "github.com/mallvielfrass/GoMusicalServer/mod"
-	jql "github.com/mallvielfrass/GoMusicalServer/mod/jql"
+	"github.com/mallvielfrass/GoMusicalServer/mod/jql"
 )
 
 //отдельная функция для проверки ошибок. юзать:
@@ -29,7 +30,14 @@ func aboutHTML(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//test
-	jql.Mainez()
+	if _, err := os.Stat("./VkMusic.db"); err == nil {
+		//jql.Add(129346, "AnyHash", "Song")
+		fmt.Println("table Ok")
+
+	} else if os.IsNotExist(err) {
+		jql.Create()
+
+	}
 	//pages
 	http.HandleFunc("/", search)
 	http.HandleFunc("/api_help", apiHTML)
