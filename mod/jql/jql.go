@@ -21,6 +21,38 @@ func check(e error) {
 		panic(e)
 	}
 }
+func Search(VarVkID int) string {
+	db, err := sql.Open("sqlite3", "./VkMusic.db")
+	check(err)
+	defer db.Close()
+	fmt.Println("VarVkID", VarVkID)
+	rows, err := db.Query("SELECT * FROM Music WHERE VkID=$1", VarVkID)
+	if err != nil {
+		fmt.Println("Error!")
+	}
+
+	//fmt.Println(numbe)
+	musDate := []VkMusic{}
+	//fmt.Println(rows.Next())
+	for rows.Next() {
+		p := VkMusic{}
+		err := rows.Scan(&p.ID, &p.VkID, &p.Hash, &p.Name)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		musDate = append(musDate, p)
+	}
+	lemD := len(musDate)
+	ret := "false"
+	fmt.Println("len:", lemD)
+	if lemD != 0 {
+		ret = musDate[0].Hash
+		fmt.Println(musDate[0].ID, musDate[0].VkID, musDate[0].Hash, musDate[0].Name)
+	}
+	
+	return ret
+}
 func Add(VarVkID int, VarHash, VarName string) {
 
 	db, err := sql.Open("sqlite3", "./VkMusic.db")

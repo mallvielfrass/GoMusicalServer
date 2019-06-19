@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/mallvielfrass/GoMusicalServer/mod/jql"
+
 	mod "github.com/mallvielfrass/GoMusicalServer/mod"
 	pretiumvkgo "github.com/mallvielfrass/pretiumVKgo"
 )
@@ -101,11 +103,15 @@ func api(w http.ResponseWriter, r *http.Request) {
 	if ok {
 
 		arr := strings.Split(value[0], "cut=")
-		id := arr[1]
-
-		addr := localscan(id)
-		fmt.Println("localsscan:", addr)
-		name := "_split_" + id + "_split_" + arr[2]
+		fmt.Println(arr)
+		id, err := strconv.Atoi(arr[1])
+		check(err)
+		fmt.Println("id ", id)
+		fmt.Println("name ", arr[2])
+		fmt.Println("link ", arr[3])
+		addr := jql.Search(id)
+		//fmt.Println("localsscan: %s", addr)
+		name := "_split_" + string(id) + "_split_" + arr[2]
 		link := arr[3]
 
 		//fmt.Println("func Download")
@@ -120,10 +126,11 @@ func api(w http.ResponseWriter, r *http.Request) {
 			convert(link, nameOpus)
 			hash := mod.GetHash(nameOpus)
 			name := mod.Rename(nameOpus, hash)
+			fmt.Println("id %s name %s ", id, arr[2])
+			jql.Add(id, hash, arr[2])
 			http.Redirect(w, r, "/opus/"+name, 301)
-		}
-		if addr == "true" {
-			http.Redirect(w, r, "/"+nameOpus, 301)
+		} else {
+			http.Redirect(w, r, "/"+addr+".opus", 301)
 		}
 
 	} else {
